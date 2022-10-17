@@ -1,25 +1,36 @@
-import logo from './logo.svg';
+import React from 'react';
+import {useState,useEffect} from 'react';
 import './App.css';
+import axios from 'axios';
+
+const URL = 'https://api.jokes.one/jod';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
+  const [title,setTitle] = useState('');
+  const [text,setText] = useState('');
+
+
+  useEffect(() => {
+    axios.get(URL)
+      .then((response) => {
+        const joke = response.data.contents.jokes[0].joke;
+        setTitle(joke.text);
+        setText(joke.text);
+      }).catch(error => {
+        alert(error);
+      });
+  },  []) 
+  
+  return (
+    <div style={{margin: 50}}>
+    <h1>Joke of the day</h1>
+    <h3>{text}</h3>
+    <p>{title}</p>
+  </div>
+  );
+
+  
+}   
 export default App;
+
